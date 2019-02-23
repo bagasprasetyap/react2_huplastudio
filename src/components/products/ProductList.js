@@ -1,14 +1,18 @@
 import React from "react";
 import ProductCard from "./ProductCard";
-import { Link } from "react-router-dom";
 
-const ProductList = () => {
+const ProductList = ({ products }) => {
   return (
-    <div className="section container">
+    <div className="product-list section">
       <div className="row">
-        <Link to="/shop/123">
-          <ProductCard />
-        </Link>
+        {products &&
+          products.map(product => {
+            return (
+              <a href={"/shop/" + product.id}>
+                <ProductCard product={product} key={product.id} />
+              </a>
+            );
+          })}
       </div>
     </div>
   );

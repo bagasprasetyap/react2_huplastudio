@@ -1,114 +1,114 @@
-import React from "react";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { firestoreConnect } from "react-redux-firebase";
+import { compose } from "redux";
 import gambar from "../../img/imageCard.jpeg";
 
-const ProductDetails = () => {
-  return (
-    <div className="section container product-details">
-      <div className="row">
-        {/* Gambar Product */}
-        <div className="col s12 l6 ">
-          <div className="card">
-            <div className="card-image">
-              <img src={gambar} alt="gambar" />
-            </div>
-          </div>
-        </div>
+class ProductDetails extends Component {
+  state = {
+    quantity: 1
+  };
 
-        {/* Details Product */}
-        <form className="col s12 l6">
-          <div className="card z-depth-0">
-            <h4>3D Puzzle - Rinjani</h4>
-            <h6>Rp199.000</h6>
-            <p style={{ textAlign: "justify" }}>
-              This cozy hoodie from Bella + Canvas sports the subdued ILTMS
-              logos on the left chest and the right sleeve. Make sure you stay
-              warm and show people that YOU like to make stuff too! 60/40
-              Cotton/Polyester blend.
-            </p>
-            <br />
-            <div className="input-field col s2 l2 ">
-              <select>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-              </select>
-              <label style={{ fontWeight: "bold" }}>Quantity:</label>
-            </div>
-            <div className="input-field">
-              <button
-                className="btn waves-effect waves-light teal"
-                type="submit"
-                style={{ width: "100%" }}
-              >
-                Add To Cart
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
+  tambahItem = () => {
+    this.setState({ quantity: this.state.quantity + 1 });
+  };
 
-      {/* Gambar Product lanjutan */}
-      <div className="row">
-        <div className="col l2">
-          <div className="card">
-            <div className="card-image">
-              <img src={gambar} alt="gambar" />
-            </div>
-          </div>
-        </div>
-        <div className="col l2">
-          <div className="card">
-            <div className="card-image">
-              <img src={gambar} alt="gambar" />
-            </div>
-          </div>
-        </div>
-        <div className="col l2">
-          <div className="card">
-            <div className="card-image">
-              <img src={gambar} alt="gambar" />
-            </div>
-          </div>
-        </div>
+  kurangItem = () => {
+    if (this.state.quantity <= 1) {
+      this.setState({
+        quantity: 1
+      });
+    } else {
+      this.setState({ quantity: this.state.quantity - 1 });
+    }
+  };
 
-        {/* tabs description */}
+  render() {
+    const { product } = this.props;
+    if (!product)
+      return (
+        <div className="container center">
+          <h4>still loading!</h4>
+        </div>
+      );
+    return (
+      <div className="section container product-details">
         <div className="row">
-          <div className="col l8 offset-l2">
-            <ul className="tabs ">
-              <li className="tab col ">
-                <a className="active" href="#tab1">
-                  Description
-                </a>
-              </li>
-              <li className="tab col">
-                <a href="#tab2">Additional Information</a>
-              </li>
-              <li className="tab col">
-                <a href="#tab3">Reviews</a>
-              </li>
-            </ul>
+          {/* Gambar Product lanjutan */}
+          <div className="col l1">
+            <div className="card">
+              <div className="card-image">
+                <img src={gambar} alt="gambar" />
+              </div>
+            </div>
+            <div className="card">
+              <div className="card-image">
+                <img src={gambar} alt="gambar" />
+              </div>
+            </div>
           </div>
 
-          <div id="tab1" className="col l8 offset-l2">
-            <p style={{ textAlign: "justify" }}>
-              This cozy hoodie from Bella + Canvas sports the subdued ILTMS
-              logos on the left chest and the right sleeve. Make sure you stay
-              warm and show people that YOU like to make stuff too! 60/40
-              Cotton/Polyester blend.
-            </p>
+          {/* Gambar Product */}
+          <div className="col s12 l6 ">
+            <div className="card">
+              <div className="card-image">
+                <img src={gambar} alt="gambar" />
+              </div>
+            </div>
           </div>
-          <div id="tab2" className="col l8 offset-l2">
-            <h6>Rp199.000</h6>
-          </div>
-          <div id="tab3" className="col l8 offset-l2">
-            <p>Review: bagus sekali</p>
-          </div>
+
+          {/* Details Product */}
+          <form className="col s12 l5">
+            <div className="card z-depth-0">
+              <h4>{product.title}</h4>
+              <h6>Rp{product.price}</h6>
+              <p style={{ textAlign: "justify" }}>{product.description}</p>
+              <br />
+
+              {/* select quantity item */}
+              <div className="jumlah">
+                <div onClick={this.kurangItem} className="btn-floating">
+                  <i className="material-icons">remove</i>
+                </div>
+                <button
+                  className="btn-flat disabled"
+                  style={{ fontSize: "18pt" }}
+                >
+                  {this.state.quantity}
+                </button>
+                <div onClick={this.tambahItem} className="btn-floating">
+                  <i className="material-icons">add</i>
+                </div>
+              </div>
+
+              <div className="input-field">
+                <button
+                  className="btn waves-effect waves-light teal"
+                  type="submit"
+                  style={{ width: "40%" }}
+                >
+                  Add To Cart
+                </button>
+              </div>
+              <h6>Design By Hupla Studio</h6>
+            </div>
+          </form>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
+}
+
+const mapStateToProps = (state, ownProps) => {
+  const id = ownProps.match.params.id;
+  const products = state.firestore.data.products;
+  const product = products ? products[id] : null;
+  return {
+    product: product
+  };
 };
 
-export default ProductDetails;
+export default compose(
+  connect(mapStateToProps),
+  firestoreConnect([{ collection: "products" }])
+)(ProductDetails);
