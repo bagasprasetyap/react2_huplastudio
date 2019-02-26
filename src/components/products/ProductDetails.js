@@ -25,6 +25,7 @@ class ProductDetails extends Component {
 
   render() {
     const { product } = this.props;
+    console.log(product);
     if (!product)
       return (
         <div className="container center">

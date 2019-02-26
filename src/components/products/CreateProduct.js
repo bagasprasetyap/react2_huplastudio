@@ -7,7 +7,8 @@ class CreateProduct extends Component {
     title: "",
     price: "",
     merchant: "",
-    description: ""
+    description: "",
+    gambarURL: ""
   };
 
   handleChange = e => {
@@ -24,7 +25,7 @@ class CreateProduct extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="container col l6">
         <form onSubmit={this.handleSubmit}>
           <h5>CREATE NEW PRODUCT</h5>
           <div className="input-field">
@@ -36,16 +37,27 @@ class CreateProduct extends Component {
             <label htmlFor="price">Product Price</label>
           </div>
           <div className="input-field">
-            <input type="text" id="merchant" onChange={this.handleChange} />
-            <label htmlFor="merchant">Product Merchant</label>
-          </div>
-          <div className="input-field">
             <textarea
               className="materialize-textarea"
               id="description"
               onChange={this.handleChange}
             />
             <label htmlFor="title">Product Description</label>
+          </div>
+
+          <div className="file-field input-field">
+            <div className="btn blue">
+              <span>File</span>
+              <input type="file" id="gambar" onChange={this.handleChange} />
+            </div>
+            <div className="file-path-wrapper">
+              <input className="file-path validate" type="text" />
+            </div>
+          </div>
+
+          <div className="input-field">
+            <input type="text" id="merchant" onChange={this.handleChange} />
+            <label htmlFor="merchant">Merchant Name</label>
           </div>
           <div className="input-field">
             <button className="btn blue">Create</button>

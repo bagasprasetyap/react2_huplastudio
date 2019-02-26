@@ -2,7 +2,6 @@ import React from "react";
 import gambar from "../../img/imageCard.jpeg";
 
 const ProductCard = ({ product }) => {
-  // console.log(product);
   return (
     <div className="col s12 m6 l3">
       <div className="card product-card">

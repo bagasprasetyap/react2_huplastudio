@@ -1,14 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
 
-class ButtonLogin extends Component {
-  render() {
-    return (
-      <React.Fragment>
-        <a href="/login" className="btn teal z-depth-0">
-          <i className="material-icons">person</i>
-        </a>
-      </React.Fragment>
-    );
-  }
-}
+const ButtonLogin = () => {
+  return (
+    <div>
+      <a href="/login" className="btn-floating  waves-effect waves-light teal">
+        <i className="material-icons">person</i>
+      </a>
+    </div>
+  );
+};
 export default ButtonLogin;

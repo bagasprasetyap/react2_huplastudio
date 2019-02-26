@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
+import { signIn } from "../../store/actions/authActions";
 
 class Login extends Component {
   state = {
@@ -15,10 +18,12 @@ class Login extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    console.log(this.state);
+    this.props.signIn(this.state);
   };
 
   render() {
+    const { authError, auth } = this.props;
+    if (auth.uid) return <Redirect to="/" />;
     return (
       <React.Fragment>
         <section className="section container" id="loginForm">
@@ -56,6 +61,10 @@ class Login extends Component {
                   </button>
                 </div>
 
+                <div className="red-text center">
+                  {authError ? <p>{authError}</p> : null}
+                </div>
+
                 <a href="/recover" className="center black-text">
                   <p>Forgot your password?</p>
                 </a>
@@ -84,4 +93,20 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapStateToProps = state => {
+  return {
+    authError: state.auth.authError,
+    auth: state.firebase.auth
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    signIn: creds => dispatch(signIn(creds))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Login);

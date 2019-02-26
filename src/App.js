@@ -7,6 +7,7 @@ import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import ProductDetails from "./components/products/ProductDetails";
 import Shop from "./components/Shop";
+import FAB from "./components/FAB";
 import CreateProduct from "./components/products/CreateProduct";
 
 class App extends Component {
@@ -23,6 +24,12 @@ class App extends Component {
             <Route path="/shop" component={Shop} />
             <Route path="/createproduct" component={CreateProduct} />
           </Switch>
+          <div
+            className="fab hide-on-large-only"
+            style={{ position: "fixed", right: "50px", bottom: "60px" }}
+          >
+            <FAB />
+          </div>
           <Footer />
         </div>
       </BrowserRouter>

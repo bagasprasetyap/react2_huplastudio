@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import { signUp } from "../../store/actions/authActions";
 
-class Login extends Component {
+class Register extends Component {
   state = {
     firstName: "",
     lastName: "",
@@ -16,10 +19,12 @@ class Login extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    console.log(this.state);
+    this.props.signUp(this.state);
   };
 
   render() {
+    const { authError, auth } = this.props;
+    if (auth.uid) return <Redirect to="/" />;
     return (
       <React.Fragment>
         <section className="section container">
@@ -29,6 +34,22 @@ class Login extends Component {
                 <h4 className="center">Create Account</h4>
 
                 <div className="divider" style={{ marginTop: "30px" }} />
+
+                <div className="input-field">
+                  <i className="material-icons prefix">email</i>
+                  <label htmlFor="email">Email</label>
+                  <input type="email" id="email" onChange={this.handleChange} />
+                </div>
+
+                <div className="input-field">
+                  <i className="material-icons prefix">lock</i>
+                  <label htmlFor="password">Password</label>
+                  <input
+                    type="password"
+                    id="password"
+                    onChange={this.handleChange}
+                  />
+                </div>
 
                 <div className="input-field">
                   <i className="material-icons prefix">person</i>
@@ -51,19 +72,19 @@ class Login extends Component {
                 </div>
 
                 <div className="input-field">
-                  <i className="material-icons prefix">email</i>
-                  <label htmlFor="email">Email</label>
-                  <input type="email" id="email" onChange={this.handleChange} />
+                  <i className="material-icons prefix">home</i>
+                  <label htmlFor="address">Address</label>
+                  <input
+                    type="text"
+                    id="address"
+                    onChange={this.handleChange}
+                  />
                 </div>
 
                 <div className="input-field">
-                  <i className="material-icons prefix">lock</i>
-                  <label htmlFor="password">Password</label>
-                  <input
-                    type="password"
-                    id="password"
-                    onChange={this.handleChange}
-                  />
+                  <i className="material-icons prefix">phone_android</i>
+                  <label htmlFor="phone">Phone</label>
+                  <input type="tel" id="phone" onChange={this.handleChange} />
                 </div>
 
                 <div className="input-field">
@@ -73,6 +94,10 @@ class Login extends Component {
                   >
                     Create
                   </button>
+                </div>
+
+                <div className="red-text center">
+                  {authError ? <p>{authError}</p> : null}
                 </div>
 
                 <a href="/" className="center black-text">
@@ -87,4 +112,21 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapStateToProps = state => {
+  console.log(state);
+  return {
+    authError: state.auth.authError,
+    auth: state.firebase.auth
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    signUp: newUser => dispatch(signUp(newUser))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Register);

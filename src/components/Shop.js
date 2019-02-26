@@ -7,7 +7,6 @@ import { compose } from "redux";
 class Shop extends Component {
   render() {
     const { products } = this.props;
-    console.log(products);
     return (
       <div className="shop container">
         <div className="row">
