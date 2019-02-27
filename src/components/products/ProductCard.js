@@ -1,12 +1,11 @@
 import React from "react";
-import gambar from "../../img/imageCard.jpeg";
 
 const ProductCard = ({ product }) => {
   return (
-    <div className="col s12 m6 l3">
+    <div className="col s12 l4">
       <div className="card product-card">
         <div className="card-image">
-          <img src={gambar} alt="gambar" />
+          <img src={product.gambarURL} alt="gambar" />
         </div>
         <div className="card-content">
           <span
@@ -16,7 +15,7 @@ const ProductCard = ({ product }) => {
             {product.title}
           </span>
           <p>Rp{product.price}</p>
-          <h6 style={{ textAlign: "right" }}>by Hupla Studio</h6>
+          <h6 style={{ textAlign: "right" }}>by {product.merchant}</h6>
         </div>
       </div>
     </div>

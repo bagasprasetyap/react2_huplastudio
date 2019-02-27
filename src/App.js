@@ -9,6 +9,7 @@ import ProductDetails from "./components/products/ProductDetails";
 import Shop from "./components/Shop";
 import FAB from "./components/FAB";
 import CreateProduct from "./components/products/CreateProduct";
+import Cart from "./components/carts/Cart";
 
 class App extends Component {
   render() {
@@ -22,6 +23,7 @@ class App extends Component {
             <Route path="/register" component={Register} />
             <Route path="/shop/:id" component={ProductDetails} />
             <Route path="/shop" component={Shop} />
+            <Route path="/cart" component={Cart} />
             <Route path="/createproduct" component={CreateProduct} />
           </Switch>
           <div

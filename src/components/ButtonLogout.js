@@ -5,6 +5,9 @@ import { signOut } from "../store/actions/authActions";
 const ButtonLogout = props => {
   return (
     <div>
+      <a href="/cart" className="btn-floating  waves-effect waves-light teal">
+        <i className="material-icons">shopping_cart</i>
+      </a>
       <a
         href="/profile"
         className="btn-floating  waves-effect waves-light teal"

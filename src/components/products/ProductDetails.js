@@ -2,12 +2,25 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";
 import { compose } from "redux";
-import gambar from "../../img/imageCard.jpeg";
+import { createCart } from "../../store/actions/cartActions";
 
 class ProductDetails extends Component {
   state = {
-    quantity: 1
+    quantity: 1,
+    title: "",
+    price: "",
+    gambarURL: ""
   };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.product !== this.props.product) {
+      this.setState({
+        title: nextProps.product.title,
+        price: nextProps.product.price,
+        gambarURL: nextProps.product.gambarURL
+      });
+    }
+  }
 
   tambahItem = () => {
     this.setState({ quantity: this.state.quantity + 1 });
@@ -23,9 +36,19 @@ class ProductDetails extends Component {
     }
   };
 
+  // Submit Cart
+  handleSubmit = e => {
+    e.preventDefault();
+
+    this.props.createCart(this.state);
+    console.log(this.state);
+  };
+
   render() {
     const { product } = this.props;
-    console.log(product);
+    // console.log(product);
+    console.log(this.props);
+    console.log(this.state);
     if (!product)
       return (
         <div className="container center">
@@ -39,12 +62,12 @@ class ProductDetails extends Component {
           <div className="col l1">
             <div className="card">
               <div className="card-image">
-                <img src={gambar} alt="gambar" />
+                <img src={product.gambarURL} alt="gambar" />
               </div>
             </div>
             <div className="card">
               <div className="card-image">
-                <img src={gambar} alt="gambar" />
+                <img src={product.gambarURL} alt="gambar" />
               </div>
             </div>
           </div>
@@ -53,13 +76,13 @@ class ProductDetails extends Component {
           <div className="col s12 l6 ">
             <div className="card">
               <div className="card-image">
-                <img src={gambar} alt="gambar" />
+                <img src={product.gambarURL} alt="gambar" />
               </div>
             </div>
           </div>
 
           {/* Details Product */}
-          <form className="col s12 l5">
+          <form className="col s12 l5" onSubmit={this.handleSubmit}>
             <div className="card z-depth-0">
               <h4>{product.title}</h4>
               <h6>Rp{product.price}</h6>
@@ -67,7 +90,8 @@ class ProductDetails extends Component {
               <br />
 
               {/* select quantity item */}
-              <div className="jumlah">
+              <div className="jumlah input-field">
+                <p className="grey-text">Quantity:</p>
                 <div onClick={this.kurangItem} className="btn-floating">
                   <i className="material-icons">remove</i>
                 </div>
@@ -82,15 +106,16 @@ class ProductDetails extends Component {
                 </div>
               </div>
 
+              {/* add to cart button */}
               <div className="input-field">
                 <button
                   className="btn waves-effect waves-light teal"
                   type="submit"
-                  style={{ width: "40%" }}
                 >
                   Add To Cart
                 </button>
               </div>
+
               <h6>Design By Hupla Studio</h6>
             </div>
           </form>
@@ -101,6 +126,7 @@ class ProductDetails extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
+  console.log(state);
   const id = ownProps.match.params.id;
   const products = state.firestore.data.products;
   const product = products ? products[id] : null;
@@ -109,7 +135,16 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
+const mapDispatchToProps = dispatch => {
+  return {
+    createCart: cart => dispatch(createCart(cart))
+  };
+};
+
 export default compose(
-  connect(mapStateToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
   firestoreConnect([{ collection: "products" }])
 )(ProductDetails);
